@@ -213,7 +213,9 @@
 - (void)setThumbSize:(CGSize)thumbSize
 {
     _thumbSize = thumbSize;
-    [self setupSubviewsFrames];
+    CGPoint thumbCenter = _thmubImageView.center;
+    _thmubImageView.frame = CGRectMake(0, 0, thumbSize.width, thumbSize.height);
+    _thmubImageView.center = thumbCenter;
 }
 
 - (void)setBottomMagin:(CGFloat)bottomMagin
@@ -226,7 +228,7 @@
 {
     _progress = progress;
     _startValue = progress;
-    [self setupSubviewsFrames];
+    [self setThumbFrameWithProgress:progress];
 }
 
 - (void)setCornerRadius:(CGFloat)cornerRadius
@@ -251,13 +253,18 @@
 - (void)setProgressLabelSize:(CGSize)progressLabelSize
 {
     _progressLabelSize = progressLabelSize;
-    [self setupSubviewsFrames];
+    CGFloat maxY = CGRectGetMaxY(_progressLabel.frame);
+    CGFloat centerX = _progressLabel.center.x;
+    _progressLabel.frame = CGRectMake(0, 0, progressLabelSize.width, progressLabelSize.height);
+    _progressLabel.center = CGPointMake(centerX, maxY - progressLabelSize.height / 2.0);
+    _progressLabelBgImageView.frame = _progressLabel.frame;
 }
 
 - (void)setProgressLabelBottomMagin:(CGFloat)progressLabelBottomMagin
 {
-    _progressLabelBottomMagin = progressLabelBottomMagin;
-    [self setupSubviewsFrames];
+    CGFloat changeValue = _progressLabelBottomMagin - progressLabelBottomMagin;
+    _progressLabel.frame = CGRectMake(_progressLabel.frame.origin.x, _progressLabel.frame.origin.y + changeValue, _progressLabel.frame.size.width, _progressLabel.frame.size.height);
+    _progressLabelBgImageView.frame = _progressLabel.frame;
 }
 
 - (void)setProgressLabelFont:(UIFont *)progressLabelFont
@@ -438,6 +445,11 @@
 }
 
 #pragma mark -OutsideMethod
+- (void)setProgress:(CGFloat)progress animate:(BOOL)animate
+{
+    
+}
+
 - (void)show
 {
     [self showWithAnimation:nil
