@@ -8,10 +8,95 @@
 
 #import "WKCSliderView.h"
 
+@interface WKCWeakProxy : NSProxy <NSObject>
+
+@property (nonatomic, weak, readonly) id target;
+
+- (instancetype)initWithTarget:(id)target;
+
++ (instancetype)proxyWithTarget:(id)target;
+
+@end
+
+
+@implementation WKCWeakProxy
+
+- (instancetype)initWithTarget:(id)target {
+    _target = target;
+    return self;
+}
+
++ (instancetype)proxyWithTarget:(id)target {
+    return [[WKCWeakProxy alloc] initWithTarget:target];
+}
+
+- (id)forwardingTargetForSelector:(SEL)selector {
+    return _target;
+}
+
+- (void)forwardInvocation:(NSInvocation *)invocation {
+    void *null = NULL;
+    [invocation setReturnValue:&null];
+}
+
+- (NSMethodSignature *)methodSignatureForSelector:(SEL)selector {
+    return [NSObject instanceMethodSignatureForSelector:@selector(init)];
+}
+
+- (BOOL)respondsToSelector:(SEL)aSelector {
+    return [_target respondsToSelector:aSelector];
+}
+
+- (BOOL)isEqual:(id)object {
+    return [_target isEqual:object];
+}
+
+- (NSUInteger)hash {
+    return [_target hash];
+}
+
+- (Class)superclass {
+    return [_target superclass];
+}
+
+- (Class)class {
+    return [_target class];
+}
+
+- (BOOL)isKindOfClass:(Class)aClass {
+    return [_target isKindOfClass:aClass];
+}
+
+- (BOOL)isMemberOfClass:(Class)aClass {
+    return [_target isMemberOfClass:aClass];
+}
+
+- (BOOL)conformsToProtocol:(Protocol *)aProtocol {
+    return [_target conformsToProtocol:aProtocol];
+}
+
+- (BOOL)isProxy {
+    return YES;
+}
+
+- (NSString *)description {
+    return [_target description];
+}
+
+- (NSString *)debugDescription {
+    return [_target debugDescription];
+}
+
+@end
+
+
+
 @interface WKCSliderView()
 {
     CGFloat _startLocationX;
     CGFloat _startValue;
+    CGFloat _preferredValue;
+    CGFloat _wantProgress;
 }
 
 @property (nonatomic, strong) UIImageView * progressImageView;
@@ -20,6 +105,8 @@
 @property (nonatomic, strong) UIImageView * centerImageView;
 @property (nonatomic, strong) UIImageView * progressLabelBgImageView;
 @property (nonatomic, strong) UILabel * progressLabel;
+@property (nonatomic, strong) CADisplayLink * displayLink;
+@property (nonatomic, copy) void(^completionBlock)(void);
 
 @end
 
@@ -45,6 +132,11 @@
         _progressLabelTextColor = UIColor.whiteColor;
         
         _shouldShowProgressLabel = YES;
+        _couldDrag = YES;
+        _touchMoveAnimate = YES;
+        _wantProgress = 0;
+        self.animationDutation = 2.0;
+        
         
         [self addSubview:self.trackImageView];
         [self addSubview:self.progressImageView];
@@ -54,7 +146,7 @@
         [self addSubview:self.progressLabel];
         
         self.userInteractionEnabled = YES;
-        UITapGestureRecognizer * tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(actionTap)];
+        UITapGestureRecognizer * tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(actionTap:)];
         [self addGestureRecognizer:tap];
     }
     
@@ -229,6 +321,11 @@
     _progress = progress;
     _startValue = progress;
     [self setThumbFrameWithProgress:progress];
+    
+    if (self.delegate && [self.delegate respondsToSelector:@selector(sliderViewDidValueChanged:value:)]) {
+        [self.delegate sliderViewDidValueChanged:self value:progress];
+    }
+    
 }
 
 - (void)setCornerRadius:(CGFloat)cornerRadius
@@ -291,14 +388,30 @@
     _progressLabelBgImageView.image = progressLabelBgImage;
 }
 
-
+- (void)setAnimationDutation:(CGFloat)animationDutation
+{
+    _animationDutation = animationDutation;
+    _preferredValue = 100.0 / (60.0 * animationDutation);
+}
 
 #pragma mark -InsideMethod
-- (void)actionTap
+- (void)actionTap:(UITapGestureRecognizer *)sender
 {
-    if (self.delegate && [self.delegate respondsToSelector:@selector(sliderViewDidTouchUpInside:)]) {
-        [self.delegate sliderViewDidTouchUpInside:self];
+    CGPoint movePoint = [sender locationInView:self];
+    CGFloat movePointX = movePoint.x - self.thmubImageView.center.x;
+    CGFloat width = CGRectGetWidth(self.trackImageView.frame);
+    CGFloat scale = movePointX / width;
+    CGFloat value = _progress + scale;
+    if (value <= 0 ) value = 0;
+    if (value >= 1) value = 1;
+    
+    if (self.delegate && [self.delegate respondsToSelector:@selector(sliderViewDidTouchUpInside:atValue:)]) {
+        [self.delegate sliderViewDidTouchUpInside:self atValue:value];
     }
+
+    if (!_couldDrag) return;
+    
+    [self setProgress:value animated:_touchMoveAnimate];
 }
 
 - (void)setupSubviewsFrames
@@ -388,6 +501,8 @@
 #pragma mark -Touch
 - (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event
 {
+    if (!_couldDrag) return;
+    
     CGPoint startPoint = [touches.allObjects.lastObject locationInView:self];
     _startLocationX = startPoint.x;
     _startValue = _progress;
@@ -399,6 +514,8 @@
 
 - (void)touchesMoved:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event
 {
+    if (!_couldDrag) return;
+    
     CGPoint movePoint = [touches.allObjects.lastObject locationInView:self];
     CGFloat movePointX = movePoint.x - _startLocationX;
     CGFloat width = CGRectGetWidth(_trackImageView.frame);
@@ -413,15 +530,13 @@
     if (self.delegate && [self.delegate respondsToSelector:@selector(sliderViewDidValueChanged:value:)]) {
         [self.delegate sliderViewDidValueChanged:self value:value];
     }
-    
-    if (self.progressHandle) {
-        self.progressHandle(value);
-    }
 }
 
 
 - (void)touchesEnded:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event
 {
+    if (!_couldDrag) return;
+    
     if (self.delegate && [self.delegate respondsToSelector:@selector(sliderViewDidEndChange:value:)]) {
         [self.delegate sliderViewDidEndChange:self value:_progress];
     }
@@ -435,7 +550,6 @@
     [UIView animateWithDuration:0.3f delay:1 options:UIViewAnimationOptionCurveLinear animations:^{
         self.progressLabel.layer.opacity = 0.0;
         self.progressLabelBgImageView.layer.opacity = 0.0;
-        
     } completion:^(BOOL finished) {
         if (finished) {
             self.progressLabel.hidden = YES;
@@ -445,10 +559,90 @@
 }
 
 #pragma mark -OutsideMethod
-- (void)setProgress:(CGFloat)progress animate:(BOOL)animate
+- (void)setProgress:(CGFloat)progress
+           animated:(BOOL)animated
 {
-    
+    [self setProgress:progress
+             animated:animated
+       completeHandle:nil];
 }
+
+- (void)setProgress:(CGFloat)progress
+           animated:(BOOL)animated
+     completeHandle:(void(^)(void))handle
+{
+    [self setProgress:progress
+             animated:animated
+                delay:0.0
+       completeHandle:handle];
+}
+
+- (void)setProgress:(CGFloat)progress
+           animated:(BOOL)animated
+              delay:(CGFloat)delay
+     completeHandle:(void(^)(void))handle
+{
+    if (animated) {
+        _wantProgress = progress;
+        _preferredValue = progress > self.progress ? fabs(_preferredValue) : -fabs(_preferredValue);
+        self.completionBlock = handle;
+        [self performSelector:@selector(startAnimation)
+                   withObject:nil
+                   afterDelay:delay];
+    } else {
+        self.progress = progress;
+    }
+}
+
+- (void)startAnimation
+{
+    [_displayLink invalidate];
+    _displayLink = nil;
+    _displayLink = [CADisplayLink displayLinkWithTarget:[WKCWeakProxy proxyWithTarget:self] selector:@selector(displayAnimation:)];
+    _displayLink.preferredFramesPerSecond = 60;
+    [_displayLink addToRunLoop:[NSRunLoop currentRunLoop]
+                       forMode:NSRunLoopCommonModes];
+}
+
+- (void)displayAnimation:(CADisplayLink *)sender
+{
+    CGFloat stepValue = self.progress;
+    stepValue += (_preferredValue / 100.0);
+    if (stepValue >= 1.0) stepValue = 1.0;
+    if (stepValue <= 0.0) stepValue = 0.0;
+    self.progress = stepValue;
+    
+    // 判断结束
+    // 在递减
+    if (_preferredValue < 0) {
+        if (self.progress <= _wantProgress) {
+            self.progress = _wantProgress;
+            [sender invalidate];
+            sender = nil;
+            if (self.completionBlock) {
+                self.completionBlock();
+            }
+        }
+    } else {
+        // 在递加
+        if (self.progress >= _wantProgress) {
+            self.progress = _wantProgress;
+            [sender invalidate];
+            sender = nil;
+            if (self.completionBlock) {
+                self.completionBlock();
+            }
+        }
+    }
+}
+
+
+- (void)stopProgressAnimation
+{
+    [_displayLink invalidate];
+    _displayLink = nil;
+}
+
 
 - (void)show
 {
