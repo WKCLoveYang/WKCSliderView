@@ -14,26 +14,34 @@
 
 @optional
 
-/// 点击了sliderView
-/// @param sliderView 当前对象
-/// @param value 点击位置对应的progress值
+/**
+  点击了sliderView
+  @param sliderView 当前对象
+  @param value 值
+ */
 - (void)sliderViewDidTouchUpInside:(WKCSliderView *)sliderView atValue:(CGFloat)value;
 
-/// 值开始改变
-/// @param sliderView 当前对象
-/// @param value 初始值
+/**
+  值开始改变
+  @param sliderView 当前对象
+  @param value 初始值
+ */
 - (void)sliderViewDidStartChange:(WKCSliderView *)sliderView
                            value:(CGFloat)value;
 
-/// 值变化了
-/// @param sliderView 当前对象
-/// @param value 变化值
+/**
+ 值变化了
+ @param sliderView 当前对象
+ @param value 变化值
+ */
 - (void)sliderViewDidValueChanged:(WKCSliderView *)sliderView
                             value:(CGFloat)value;
 
-/// 值停止改变了
-/// @param sliderView 当前对象
-/// @param value 结束值
+/**
+ 值停止改变了
+ @param sliderView 当前对象
+ @param value 结束值
+ */
 - (void)sliderViewDidEndChange:(WKCSliderView *)sliderView
                          value:(CGFloat)value;
 
@@ -62,85 +70,143 @@ typedef NS_ENUM(NSInteger, WKCSliderHorizontalAlignment) {
 
 @interface WKCSliderView : UIView
 
-/// 代理
+/**
+  代理
+ */
 @property (nonatomic, weak) id<WKCSliderViewDelegate> delegate;
 
-/// 水平对齐方式, 默认居中; 左对齐或者右对齐时,horizontalMagin有效
+/**
+  水平对齐方式, 默认居中
+  左对齐或者右对齐时,horizontalMagin有效
+ */
 @property (nonatomic, assign) WKCSliderHorizontalAlignment alignment;
 
-/// 水平非中心对齐时的间距
+/**
+  水平非中心对齐时的间距
+ */
 @property (nonatomic, assign) CGFloat horizontalMagin;
 
-/// slider大小
+/**
+  slider大小
+ */
 @property (nonatomic, assign) CGSize sliderSize;
 
-/// 滑块大小
+/**
+  滑块大小
+ */
 @property (nonatomic, assign) CGSize thumbSize;
 
-/// 滑动条距底部间距, 默认0
+/**
+  滑动条距底部间距
+ */
 @property (nonatomic, assign) CGFloat bottomMagin;
 
-/// 设定初始值或者获取滑动变化后的值, 无动画
+
+/**
+ 设定初始值或者获取滑动变化后的值, 无动画
+ */
 @property (nonatomic, assign) CGFloat progress;
 
-/// 进度部分颜色
+/**
+  进度部分颜色
+ */
 @property (nonatomic, strong) UIColor * progressColor;
 
-/// 未进度部分颜色
+/**
+  未进度部分颜色
+ */
 @property (nonatomic, strong) UIColor * trackColor;
 
-/// 滑块颜色
+/**
+  滑块颜色
+ */
 @property (nonatomic, strong) UIColor * thumbColor;
 
-/// 中心点颜色
+/**
+  中心点颜色
+ */
 @property (nonatomic, strong) UIColor * centerColor;
 
-/// 进度部分图片
+/**
+  进度部分图片
+ */
 @property (nonatomic, strong) UIImage * progressImage;
 
-/// 未进度部分图片
+/**
+  未进度部分图片
+ */
 @property (nonatomic, strong) UIImage * trackImage;
 
-/// 滑块图片
+/**
+  滑块图片
+ */
 @property (nonatomic, strong) UIImage * thumbImage;
 
-/// 中心点图片
+/**
+ 中心点图片
+ */
 @property (nonatomic, strong) UIImage * centerImage;
 
-/// 进度条圆角
+
+/**
+  进度条圆角
+ */
 @property (nonatomic, assign) CGFloat cornerRadius;
 
-/// 滑块圆角
+/**
+  滑块圆角
+ */
 @property (nonatomic, assign) CGFloat thumbCornerRadius;
 
-/// 是否显示进度Label, 默认YES
+/**
+  是否显示进度Label, 默认YES
+ */
 @property (nonatomic, assign) BOOL shouldShowProgressLabel;
 
-/// 进度label大小
+/**
+  进度label大小
+ */
 @property (nonatomic, assign) CGSize progressLabelSize;
 
-/// 进度label与thumb间距
+/**
+ 进度label与thumb间距
+ */
 @property (nonatomic, assign) CGFloat progressLabelBottomMagin;
 
-/// 进度Label背景图
+
+/**
+  进度Label背景图
+ */
 @property (nonatomic, strong) UIImage * progressLabelBgImage;
 
-/// 进度Label背景颜色
+/**
+ 进度Label背景颜色
+ */
 @property (nonatomic, strong) UIColor * progressLabelBgColor;
 
-/// 进度Label字体
+/**
+ 进度Label字体
+ */
 @property (nonatomic, strong) UIFont * progressLabelFont;
 
-/// 进度Label字颜色
+/**
+ 进度Label字颜色
+ */
 @property (nonatomic, strong) UIColor * progressLabelTextColor;
 
-/// 是否支持拖拽, 默认YES
+/**
+ 是否支持拖拽, 默认YES
+*/
 @property (nonatomic, assign) BOOL couldDrag;
 
-/// 点击到某个进度时是否动画, 默认YES
+/**
+ 点击到某个进度时是否动画, 默认YES
+*/
 @property (nonatomic, assign) BOOL touchMoveAnimate;
 
-/// 0-1,一个全路程的耗时, 默认2秒
+/**
+ 0-1,一个全路程的耗时, 默认2秒
+*/
 @property (nonatomic, assign) CGFloat animationDutation;
 
 // 控件对象外放, 以便有阴影等内容
@@ -180,26 +246,5 @@ typedef NS_ENUM(NSInteger, WKCSliderHorizontalAlignment) {
 
 /// 停止动画
 - (void)stopProgressAnimation;
-
-
-/// 显示动画
-- (void)show;
-
-
-/// 显示动画
-/// @param animation animation
-/// @param completion 结束回调
-- (void)showWithAnimation:(WKCSliderBlock)animation
-               completion:(WKCSliderBlock)completion;
-
-/// 消失动画
-- (void)dismiss;
-
-
-/// 消失动画
-/// @param animation animation
-/// @param completion 结束回调
-- (void)dismissWithAnimation:(WKCSliderBlock)animation
-                  completion:(WKCSliderBlock)completion;
 
 @end
