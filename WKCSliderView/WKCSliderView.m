@@ -16,6 +16,8 @@
     CGFloat _startValue;
     CGFloat _preferredValue;
     CGFloat _wantProgress;
+    
+    BOOL _shouldStop;
 }
 
 @property (nonatomic, strong) UIImageView * progressImageView;
@@ -515,6 +517,7 @@
 
 - (void)startAnimation
 {
+    _shouldStop = NO;
     [_displayLink invalidate];
     _displayLink = nil;
     _displayLink = [CADisplayLink displayLinkWithTarget:[WKCWeakProxy proxyWithTarget:self] selector:@selector(displayAnimation:)];
@@ -538,7 +541,7 @@
             self.progress = _wantProgress;
             [sender invalidate];
             sender = nil;
-            if (self.completionBlock) {
+            if (self.completionBlock && !_shouldStop) {
                 self.completionBlock();
             }
         }
@@ -548,7 +551,7 @@
             self.progress = _wantProgress;
             [sender invalidate];
             sender = nil;
-            if (self.completionBlock) {
+            if (self.completionBlock && !_shouldStop) {
                 self.completionBlock();
             }
         }
@@ -558,6 +561,7 @@
 
 - (void)stopProgressAnimation
 {
+    _shouldStop = YES;
     [_displayLink invalidate];
     _displayLink = nil;
 }
