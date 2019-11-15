@@ -39,6 +39,12 @@
     self.index += 1;
 }
 
+- (void)invalidatePorgress
+{
+   [self.loadingDisplayLink invalidate];
+    self.loadingDisplayLink = nil;
+}
+
 - (void)stopProgress
 {
     [self.loadingDisplayLink invalidate];

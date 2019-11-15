@@ -41,8 +41,11 @@
 /// 开始动画
 - (void)startProgress;
 
-/// 结束动画
+/// 结束动画, 会跑完
 - (void)stopProgress;
+
+/// 完全结束动画, 不管跑没跑完
+- (void)invalidatePorgress;
 
 /// 自定义持续时间
 /// @param duration duration
