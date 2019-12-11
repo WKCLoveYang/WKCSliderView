@@ -2,7 +2,7 @@
 //  main.m
 //  Demo
 //
-//  Created by wkcloveYang on 2019/8/22.
+//  Created by wkcloveYang on 2019/12/11.
 //  Copyright © 2019 wkcloveYang. All rights reserved.
 //
 
@@ -10,7 +10,10 @@
 #import "AppDelegate.h"
 
 int main(int argc, char * argv[]) {
+    NSString * appDelegateClassName;
     @autoreleasepool {
-        return UIApplicationMain(argc, argv, nil, NSStringFromClass([AppDelegate class]));
+        // Setup code that might create autoreleased objects goes here.
+        appDelegateClassName = NSStringFromClass([AppDelegate class]);
     }
+    return UIApplicationMain(argc, argv, nil, appDelegateClassName);
 }

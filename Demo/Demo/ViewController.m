@@ -2,12 +2,12 @@
 //  ViewController.m
 //  Demo
 //
-//  Created by wkcloveYang on 2019/8/22.
+//  Created by wkcloveYang on 2019/12/11.
 //  Copyright © 2019 wkcloveYang. All rights reserved.
 //
 
 #import "ViewController.h"
-#import "WKCSliderView.h"
+#import "WKCSliderView/WKCSliderView.h"
 
 @interface ViewController ()
 
@@ -26,6 +26,7 @@
     
     sliderView.bottomMagin = 200;
     sliderView.progress = 0.5;
+    
 }
 
 
