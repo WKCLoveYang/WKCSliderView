@@ -7,7 +7,7 @@
 //
 
 #import "ViewController.h"
-#import <WKCSliderView.h>
+#import "WKCSliderView.h"
 
 @interface ViewController ()
 

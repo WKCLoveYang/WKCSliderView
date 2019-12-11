@@ -8,6 +8,10 @@
 
 /* Begin PBXBuildFile section */
 		3CF8B678270D427CA4C8DDBA /* libPods-default-Demo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E06771B7BC2572B9737AB603 /* libPods-default-Demo.a */; };
+		91A3618D23A0CBDE00DBBCB1 /* WKCWeakProxy.m in Sources */ = {isa = PBXBuildFile; fileRef = 91A3618523A0CBDE00DBBCB1 /* WKCWeakProxy.m */; };
+		91A3618E23A0CBDE00DBBCB1 /* WKCSliderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 91A3618823A0CBDE00DBBCB1 /* WKCSliderView.m */; };
+		91A3618F23A0CBDE00DBBCB1 /* WKCProgressView.m in Sources */ = {isa = PBXBuildFile; fileRef = 91A3618923A0CBDE00DBBCB1 /* WKCProgressView.m */; };
+		91A3619023A0CBDE00DBBCB1 /* WKCProgressLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 91A3618C23A0CBDE00DBBCB1 /* WKCProgressLabel.m */; };
 		91DC8F48230E8B740037437B /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 91DC8F47230E8B740037437B /* AppDelegate.m */; };
 		91DC8F4B230E8B740037437B /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 91DC8F4A230E8B740037437B /* ViewController.m */; };
 		91DC8F4E230E8B740037437B /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 91DC8F4C230E8B740037437B /* Main.storyboard */; };
@@ -18,6 +22,14 @@
 
 /* Begin PBXFileReference section */
 		68BBCCF977D5B2A07BAC94CB /* Pods-default-Demo.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-default-Demo.debug.xcconfig"; path = "Target Support Files/Pods-default-Demo/Pods-default-Demo.debug.xcconfig"; sourceTree = "<group>"; };
+		91A3618523A0CBDE00DBBCB1 /* WKCWeakProxy.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WKCWeakProxy.m; sourceTree = "<group>"; };
+		91A3618623A0CBDE00DBBCB1 /* WKCProgressView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WKCProgressView.h; sourceTree = "<group>"; };
+		91A3618723A0CBDE00DBBCB1 /* WKCProgressLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WKCProgressLabel.h; sourceTree = "<group>"; };
+		91A3618823A0CBDE00DBBCB1 /* WKCSliderView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WKCSliderView.m; sourceTree = "<group>"; };
+		91A3618923A0CBDE00DBBCB1 /* WKCProgressView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WKCProgressView.m; sourceTree = "<group>"; };
+		91A3618A23A0CBDE00DBBCB1 /* WKCWeakProxy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WKCWeakProxy.h; sourceTree = "<group>"; };
+		91A3618B23A0CBDE00DBBCB1 /* WKCSliderView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WKCSliderView.h; sourceTree = "<group>"; };
+		91A3618C23A0CBDE00DBBCB1 /* WKCProgressLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WKCProgressLabel.m; sourceTree = "<group>"; };
 		91DC8F43230E8B740037437B /* Demo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Demo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		91DC8F46230E8B740037437B /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		91DC8F47230E8B740037437B /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -44,6 +56,22 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		91A3618423A0CBDE00DBBCB1 /* WKCSliderView */ = {
+			isa = PBXGroup;
+			children = (
+				91A3618523A0CBDE00DBBCB1 /* WKCWeakProxy.m */,
+				91A3618623A0CBDE00DBBCB1 /* WKCProgressView.h */,
+				91A3618723A0CBDE00DBBCB1 /* WKCProgressLabel.h */,
+				91A3618823A0CBDE00DBBCB1 /* WKCSliderView.m */,
+				91A3618923A0CBDE00DBBCB1 /* WKCProgressView.m */,
+				91A3618A23A0CBDE00DBBCB1 /* WKCWeakProxy.h */,
+				91A3618B23A0CBDE00DBBCB1 /* WKCSliderView.h */,
+				91A3618C23A0CBDE00DBBCB1 /* WKCProgressLabel.m */,
+			);
+			name = WKCSliderView;
+			path = ../../WKCSliderView;
+			sourceTree = "<group>";
+		};
 		91DC8F3A230E8B740037437B = {
 			isa = PBXGroup;
 			children = (
@@ -65,6 +93,7 @@
 		91DC8F45230E8B740037437B /* Demo */ = {
 			isa = PBXGroup;
 			children = (
+				91A3618423A0CBDE00DBBCB1 /* WKCSliderView */,
 				91DC8F46230E8B740037437B /* AppDelegate.h */,
 				91DC8F47230E8B740037437B /* AppDelegate.m */,
 				91DC8F49230E8B740037437B /* ViewController.h */,
@@ -92,7 +121,6 @@
 				68BBCCF977D5B2A07BAC94CB /* Pods-default-Demo.debug.xcconfig */,
 				DB3212CF3CD8AB3B43EC4982 /* Pods-default-Demo.release.xcconfig */,
 			);
-			name = Pods;
 			path = Pods;
 			sourceTree = "<group>";
 		};
@@ -192,7 +220,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				91A3618D23A0CBDE00DBBCB1 /* WKCWeakProxy.m in Sources */,
+				91A3619023A0CBDE00DBBCB1 /* WKCProgressLabel.m in Sources */,
+				91A3618F23A0CBDE00DBBCB1 /* WKCProgressView.m in Sources */,
 				91DC8F4B230E8B740037437B /* ViewController.m in Sources */,
+				91A3618E23A0CBDE00DBBCB1 /* WKCSliderView.m in Sources */,
 				91DC8F56230E8B750037437B /* main.m in Sources */,
 				91DC8F48230E8B740037437B /* AppDelegate.m in Sources */,
 			);
