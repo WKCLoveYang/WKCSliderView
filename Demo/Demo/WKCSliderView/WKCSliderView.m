@@ -66,9 +66,6 @@
         [self addSubview:self.progressLabelBgImageView];
         [self addSubview:self.progressLabel];
         
-        self.userInteractionEnabled = YES;
-        UITapGestureRecognizer * tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(actionTap:)];
-        [self addGestureRecognizer:tap];
     }
     
     return self;
@@ -316,25 +313,6 @@
 }
 
 #pragma mark -InsideMethod
-- (void)actionTap:(UITapGestureRecognizer *)sender
-{
-    CGPoint movePoint = [sender locationInView:self];
-    CGFloat movePointX = movePoint.x - self.thmubImageView.center.x;
-    CGFloat width = CGRectGetWidth(self.trackImageView.frame);
-    CGFloat scale = movePointX / width;
-    CGFloat value = _progress + scale;
-    if (value <= 0 ) value = 0;
-    if (value >= 1) value = 1;
-    
-    if (self.delegate && [self.delegate respondsToSelector:@selector(sliderViewDidTouchUpInside:atValue:)]) {
-        [self.delegate sliderViewDidTouchUpInside:self atValue:value];
-    }
-    
-    if (!_couldDrag) return;
-    
-    [self setProgress:value animated:NO];
-}
-
 - (void)setupSubviewsFrames
 {
     CGRect sliderFrame = [self getSliderFrame];
@@ -422,15 +400,31 @@
 #pragma mark -Touch
 - (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event
 {
-    if (!_couldDrag) return;
-
     CGPoint startPoint = [touches.allObjects.lastObject locationInView:self];
+    
+    CGPoint movePoint = startPoint;
+    CGFloat movePointX = movePoint.x - self.thmubImageView.center.x;
+    CGFloat width = CGRectGetWidth(self.trackImageView.frame);
+    CGFloat scale = movePointX / width;
+    CGFloat value = _progress + scale;
+    if (value <= 0 ) value = 0;
+    if (value >= 1) value = 1;
+    
+    if (self.delegate && [self.delegate respondsToSelector:@selector(sliderViewDidTouchUpInside:atValue:)]) {
+        [self.delegate sliderViewDidTouchUpInside:self atValue:value];
+    }
+    
+    if (!_couldDrag) return;
+    
+    [self setProgress:value animated:NO];
+    
     _startLocationX = startPoint.x;
     _startValue = _progress;
     
     if (self.delegate && [self.delegate respondsToSelector:@selector(sliderViewDidStartChange:value:)]) {
         [self.delegate sliderViewDidStartChange:self value:_progress];
     }
+
 }
 
 - (void)touchesMoved:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event
@@ -454,6 +448,17 @@
 }
 
 - (void)touchesEnded:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event
+{
+    if (!_couldDrag) return;
+
+    if (self.delegate && [self.delegate respondsToSelector:@selector(sliderViewDidEndChange:value:)]) {
+        [self.delegate sliderViewDidEndChange:self value:_progress];
+    }
+    
+    [self autoDimissProgressLabel];
+}
+
+- (void)touchesCancelled:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event
 {
     if (!_couldDrag) return;
 
