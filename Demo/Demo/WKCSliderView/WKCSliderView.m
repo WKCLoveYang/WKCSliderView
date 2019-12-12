@@ -18,7 +18,6 @@
     CGFloat _wantProgress;
     
     BOOL _shouldStop;
-    BOOL _isDraging;
 }
 
 @property (nonatomic, strong) UIImageView * progressImageView;
@@ -332,9 +331,8 @@
     }
     
     if (!_couldDrag) return;
-    if (_isDraging) return;
     
-    [self setProgress:value animated:_touchMoveAnimate];
+    [self setProgress:value animated:NO];
 }
 
 - (void)setupSubviewsFrames
@@ -438,7 +436,6 @@
 - (void)touchesMoved:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event
 {
     if (!_couldDrag) return;
-    _isDraging = YES;
 
     CGPoint movePoint = [touches.allObjects.lastObject locationInView:self];
     CGFloat movePointX = movePoint.x - _startLocationX;
@@ -459,18 +456,12 @@
 - (void)touchesEnded:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event
 {
     if (!_couldDrag) return;
-    _isDraging = NO;
-    
+
     if (self.delegate && [self.delegate respondsToSelector:@selector(sliderViewDidEndChange:value:)]) {
         [self.delegate sliderViewDidEndChange:self value:_progress];
     }
     
     [self autoDimissProgressLabel];
-}
-
-- (void)touchesCancelled:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event
-{
-    _isDraging = NO;
 }
 
 - (void)autoDimissProgressLabel
