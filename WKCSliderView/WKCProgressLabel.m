@@ -27,7 +27,9 @@
         [self.delegate wkcProgressLabelWillStartProgress:self];
     }
 
-    CADisplayLink *displayLink = [CADisplayLink displayLinkWithTarget:[WKCWeakProxy proxyWithTarget:self] selector:@selector(didProgressStep:)];
+    [self invalidatePorgress];
+    
+    CADisplayLink * displayLink = [CADisplayLink displayLinkWithTarget:[WKCWeakProxy proxyWithTarget:self] selector:@selector(didProgressStep:)];
     displayLink.preferredFramesPerSecond = 10;// 每秒10帧
     [displayLink addToRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
     self.loadingDisplayLink = displayLink;
