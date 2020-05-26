@@ -391,7 +391,7 @@
         
         _progressLabelBgImageView.hidden = NO;
         _progressLabelBgImageView.layer.opacity = 1.0;
-        _progressLabel.center = _progressLabel.center;
+        _progressLabelBgImageView.center = _progressLabel.center;
     }
 }
 
