@@ -58,14 +58,12 @@
         _wantProgress = 0;
         self.animationDutation = 2.0;
         
-        
         [self addSubview:self.trackImageView];
         [self addSubview:self.progressImageView];
         [self addSubview:self.centerImageView];
         [self addSubview:self.thmubImageView];
         [self addSubview:self.progressLabelBgImageView];
         [self addSubview:self.progressLabel];
-        
     }
     
     return self;
@@ -335,7 +333,6 @@
         _progressLabel.frame = CGRectMake(0, 0, progressLabelSize.width, progressLabelSize.height);
         
         _progressLabel.center = CGPointMake(0, _thmubImageView.frame.origin.y - _progressLabelBottomMagin - progressLabelSize.height / 2.0);
-        _progressLabel.center = _thmubImageView.center;
         _progressLabelBgImageView.frame = _progressLabel.frame;
     }
     
