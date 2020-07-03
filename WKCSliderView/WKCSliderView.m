@@ -44,7 +44,7 @@
         _horizontalMagin = 0.0;
         _cornerRadius = 0.0;
         _progress = 0.0;
-        _progressLabelBottomMagin = 2.0;
+        _progressLabelBottomMagin = 0.0;
         
         _progressColor = UIColor.whiteColor;
         _trackColor = UIColor.lightTextColor;
@@ -277,9 +277,9 @@
 
 - (void)setProgressLabelBottomMagin:(CGFloat)progressLabelBottomMagin
 {
-    CGFloat changeValue = _progressLabelBottomMagin - progressLabelBottomMagin;
-    _progressLabel.frame = CGRectMake(_progressLabel.frame.origin.x, _progressLabel.frame.origin.y + changeValue, _progressLabel.frame.size.width, _progressLabel.frame.size.height);
-    _progressLabelBgImageView.frame = _progressLabel.frame;
+    _progressLabelBottomMagin = progressLabelBottomMagin;
+    _progressLabel.center = CGPointMake(_progressLabel.center.x, _thmubImageView.frame.origin.y - progressLabelBottomMagin - _progressLabel.frame.size.height / 2.0);
+    _progressLabelBgImageView.center = _progressLabel.center;
 }
 
 - (void)setProgressLabelFont:(UIFont *)progressLabelFont
@@ -333,7 +333,9 @@
     if (_shouldShowProgressLabel) {
         CGSize progressLabelSize = CGSizeEqualToSize(_progressLabelSize, CGSizeZero) ? CGSizeMake(30, 30) : _progressLabelSize;
         _progressLabel.frame = CGRectMake(0, 0, progressLabelSize.width, progressLabelSize.height);
-        _progressLabel.center = CGPointMake(0, _thmubImageView.frame.origin.y - (progressLabelSize.height - _progressLabelBottomMagin));
+        
+        _progressLabel.center = CGPointMake(0, _thmubImageView.frame.origin.y - _progressLabelBottomMagin - progressLabelSize.height / 2.0);
+        _progressLabel.center = _thmubImageView.center;
         _progressLabelBgImageView.frame = _progressLabel.frame;
     }
     
