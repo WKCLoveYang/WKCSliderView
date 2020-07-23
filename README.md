@@ -16,7 +16,6 @@ WKCSliderView 适用于对滑动范围要求比较大的情况.
 | 属性  |   含义 |
 | ----   |  ----   |
 | delegate | 代理,处理值改变、滑动结束等回调事件|
-| progressHandle | 值改变block回调, 与代理不冲突 |
 | alignment | 水平对齐方式 |
 | horizontalMagin | 水平非居中时的边距 |
 | sliderSize | slider大小 |
@@ -40,4 +39,8 @@ WKCSliderView 适用于对滑动范围要求比较大的情况.
 | progressLabelBgColor | 进度Label背景颜色 |
 | progressLabelFont | 进度Label字体 |
 | progressLabelTextColor | 进度Label字颜色 |
+| couldDrag | 是否进度条能拖拽 |
+| touchMoveAnimate | 点击切换progress时是否动画|
+| animationDuration | 动画时间 |
 
+[Swift地址](https://github.com/WKCLoveYang/WKCFansySlider)
