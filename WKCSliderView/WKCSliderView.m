@@ -248,6 +248,7 @@
 {
     _cornerRadius = cornerRadius;
     _progressImageView.layer.cornerRadius = cornerRadius;
+    _trackImageView.layer.cornerRadius = cornerRadius;
 }
 
 - (void)setThumbCornerRadius:(CGFloat)thumbCornerRadius
